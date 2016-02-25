@@ -1,14 +1,24 @@
 //Search Function
+var token = "?access_token=0be2cadc97096f2d2a04bbb9efdf2502dc188653"
 
 var inputEl = document.querySelector('#search')
 inputEl.value = "Search GitHub"
 
+var searchBaseUrl = "https://api.github.com/users/"
 
-var doRequest = function(userName) {
-	var searchBaseUrl = "https://api.github.com/users/"
-	var userNamePromise = $.getJSON(searchBaseUrl + userName)  
-	userNamePromise.then(showData)
+
+
+var doSearchProfileRequest = function(userName) {
+	var fullUrl = searchBaseUrl + userName + token
+	var userNamePromise = $.getJSON(fullUrl)  
+	userNamePromise.then(showObj)
 } 
+
+var doSearchReposRequest = function(userName) {
+	var fullUrl = searchBaseUrl + userName + "/repos"+ token
+	var userReposPromise = $.getJSON(fullUrl)  
+	userReposPromise.then(showData)
+}
 
 
 var inputToUrl = function(keyEvent) {	
@@ -16,7 +26,9 @@ var inputToUrl = function(keyEvent) {
   		if (keyEvent.keyCode === 13) {
       		var userName = inputEl.value
       		inputEl.value = ""
-      		doRequest(userName)
+      		location.hash = userName
+      		doSearchProfileRequest(userName)
+      		doSearchReposRequest(userName)
   }
 }
 
@@ -27,7 +39,9 @@ inputEl.addEventListener('keydown', inputToUrl)
 
 var leftCol = document.querySelector("#left")
 
-var profileUrl = "https://api.github.com/users/RedStarThrower"
+var profileBaseUrl = "https://api.github.com/users/RedStarThrower"
+
+var profileUrl = profileBaseUrl + token
 
 var profilePromise = $.getJSON(profileUrl)
 
@@ -60,7 +74,9 @@ profilePromise.then(showObj)
 
 var rightCol = document.querySelector("#right")
 
-var reposUrl = "https://api.github.com/users/RedStarThrower/repos"
+var reposBaseUrl = "https://api.github.com/users/RedStarThrower/repos"
+
+var reposUrl = reposBaseUrl + token
 
 var reposPromise = $.getJSON(reposUrl)
 
