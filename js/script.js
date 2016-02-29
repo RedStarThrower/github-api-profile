@@ -101,11 +101,11 @@ reposPromise.then(showData)
 
 //
 
-// if (location.hash !==''){
-//         controller()
-// }
-// else{
-// profilePromise.then(showObj)
-// reposPromise.then(showData)
-// }
+if (location.hash !==''){
+        controller()
+}
+else{
+profilePromise.then(showObj)
+reposPromise.then(showData)
+}
 
