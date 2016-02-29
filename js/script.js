@@ -1,5 +1,5 @@
 //Search Function
-// var token = "?access_token=7f3238738f78bc7f0dd5b63cf8619a4692d6cc3f"
+var token = "?access_token=7f3238738f78bc7f0dd5b63cf8619a4692d6cc3f"
 
 var inputEl = document.querySelector('#search')
 inputEl.value = "Search GitHub"
@@ -26,10 +26,10 @@ window.addEventListener("hashchange", controller)
 
 
 var doSearchRequest = function(userName) {
-	var profileUrl = searchBaseUrl + userName //+ token
+	var profileUrl = searchBaseUrl + userName + token
 	var userNamePromise = $.getJSON(profileUrl)  
 	userNamePromise.then(showObj)
-	var reposUrl = searchBaseUrl + userName + "/repos" //+ token
+	var reposUrl = searchBaseUrl + userName + "/repos" + token
 	var userReposPromise = $.getJSON(reposUrl)  
 	userReposPromise.then(showData)
 }
@@ -41,7 +41,7 @@ var leftCol = document.querySelector("#left")
 
 var profileBaseUrl = "https://api.github.com/users/RedStarThrower"
 
-var profileUrl = profileBaseUrl //+ token
+var profileUrl = profileBaseUrl + token
 
 var profilePromise = $.getJSON(profileUrl)
 
@@ -73,7 +73,7 @@ var rightCol = document.querySelector("#right")
 
 var reposBaseUrl = "https://api.github.com/users/RedStarThrower/repos"
 
-var reposUrl = reposBaseUrl //+ token
+var reposUrl = reposBaseUrl + token
 
 var reposPromise = $.getJSON(reposUrl)
 
@@ -101,11 +101,12 @@ reposPromise.then(showData)
 
 //
 
-if (location.hash !==''){
-        controller()
+if (location.hash !=='') {
+    controller()
 }
-else{
-profilePromise.then(showObj)
-reposPromise.then(showData)
+
+else {
+    profilePromise.then(showObj)
+    reposPromise.then(showData)
 }
 
