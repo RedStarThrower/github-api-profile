@@ -1,56 +1,38 @@
-//Search Function
-var token = "?access_token=7f3238738f78bc7f0dd5b63cf8619a4692d6cc3f"
+//Variables
+//var token = "?access_token=40d609a166f2f82e62c7161a1e3b9502e5c11e57"
+
+//Search Variables
 
 var inputEl = document.querySelector('#search')
 inputEl.value = "Search GitHub"
 
 var searchBaseUrl = "https://api.github.com/users/"
 
-var inputToUrl = function(keyEvent) {
-    var inputEl = keyEvent.target
-    if (keyEvent.keyCode === 13) {
-        var userName = inputEl.value
-        inputEl.value = ""
-        location.hash = userName
-    }
-}
-
-inputEl.addEventListener("keydown", inputToUrl)
-
-var controller = function() {
-    var userName = location.hash.substring(1)
-    doSearchRequest(userName)
-}
-
-window.addEventListener("hashchange", controller)
-
-
-var doSearchRequest = function(userName) {
-	var profileUrl = searchBaseUrl + userName + token
-	var userNamePromise = $.getJSON(profileUrl)  
-	userNamePromise.then(showObj)
-	var reposUrl = searchBaseUrl + userName + "/repos" + token
-	var userReposPromise = $.getJSON(reposUrl)  
-	userReposPromise.then(showData)
-}
-
-
-//Left Column 
+//Left Column Variables
 
 var leftCol = document.querySelector("#left")
 
 var profileBaseUrl = "https://api.github.com/users/RedStarThrower"
 
-var profileUrl = profileBaseUrl + token
+var profileUrl = profileBaseUrl //+ token
 
-var profilePromise = $.getJSON(profileUrl)
+// Right Column Variables
 
+var rightCol = document.querySelector("#right")
 
-var showObj = function(jsonObj) {
-	//console.log(jsonObj)
-	var totalProfileString = ""
-	totalProfileString += objToHTML(jsonObj)
-	leftCol.innerHTML = totalProfileString
+var reposBaseUrl = "https://api.github.com/users/RedStarThrower/repos"
+
+var reposUrl = reposBaseUrl //+ token
+
+//Global Functions
+
+var arrToHTML = function(repoObj) {
+    var repoString = '<p id="repos-title">Repositories</p>' + '<div class="repo-container">'
+        repoString += '<h3 class="repo-name">' + '<a href="' + repoObj.html_url + '" target="_blank">' + repoObj.name + '</a>' + '</h3>'
+        repoString += '<p class="repo-description">' + repoObj.description + '</p>' 
+        repoString += '<p class="repo-list-meta">Updated: <time datetime="'+ repoObj.updated_at +  'is="relative-time" title="Feb 26, 2016, 10:37 PM CST">4 days ago</time>' + '</p>' + '<hr id="repo-line">'
+    + '</div' 
+    return repoString
 }
 
 var objToHTML = function(jsonObj) {
@@ -65,18 +47,6 @@ var objToHTML = function(jsonObj) {
     return profileString
 }
 
-profilePromise.then(showObj)
-
-// Right Column
-
-var rightCol = document.querySelector("#right")
-
-var reposBaseUrl = "https://api.github.com/users/RedStarThrower/repos"
-
-var reposUrl = reposBaseUrl + token
-
-var reposPromise = $.getJSON(reposUrl)
-
 var showData = function(jsonArray) {
     //console.log(jsonArray)
     var htmlString = ""
@@ -87,26 +57,65 @@ var showData = function(jsonArray) {
     rightCol.innerHTML = htmlString
 }
 
-
-var arrToHTML = function(repoObj) {
-	var repoString = '<p id="repos-title">Repositories</p>' + '<div class="repo-container">'
-		repoString += '<h3 class="repo-name">' + '<a href="' + repoObj.html_url + '" target="_blank">' + repoObj.name + '</a>' + '</h3>'
-		repoString += '<p class="repo-description">' + repoObj.description + '</p>'	
-		repoString += '<p class="repo-list-meta">Updated: <time datetime="'+ repoObj.updated_at +  'is="relative-time" title="Feb 26, 2016, 10:37 PM CST">4 days ago</time>' + '</p>' + '<hr id="repo-line">'
-	+ '</div' 
- 	return repoString
+var showObj = function(jsonObj) {
+    //console.log(jsonObj)
+    var totalProfileString = ""
+    totalProfileString += objToHTML(jsonObj)
+    leftCol.innerHTML = totalProfileString
 }
 
-reposPromise.then(showData)
+//Search Functions
 
-//
 
-if (location.hash !=='') {
+var inputToUrl = function(keyEvent) {
+    var inputEl = keyEvent.target
+    if (keyEvent.keyCode === 13) {
+        var userName = inputEl.value
+        inputEl.value = ""
+        location.hash = userName
+    }
+}
+
+var doSearchRequest = function(userName) {
+    var profileUrl = searchBaseUrl + userName //+ token
+    var userNamePromise = $.getJSON(profileUrl)  
+    userNamePromise.then(showObj)
+    var reposUrl = searchBaseUrl + userName + "/repos" //+ token
+    var userReposPromise = $.getJSON(reposUrl)  
+    userReposPromise.then(showData)
+}
+
+//Active Functions
+
+var controller = function() {
+    var routeName = location.hash.substring(1)
+    if (routeName === "home") {
+        showHomeScreen()
+    }
+    else if (routeName === "settings") {
+        leftCol.innerHTML = "Welcome to the settings page"
+    }
+    else {
+        doSearchRequest(routeName)
+    }
+}
+
+var showHomeScreen = function() {
+    leftCol.innerHTML = "Home on the profile page"
+    rightCol.innerHTML = "Repos go here"
+}
+
+
+inputEl.addEventListener("keydown", inputToUrl)
+window.addEventListener("hashchange", controller)
+
+
+if (location.hash === "") {
+    location.hash = "home"
+}
+else {
     controller()
 }
 
-else {
-    profilePromise.then(showObj)
-    reposPromise.then(showData)
-}
+
 
