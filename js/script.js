@@ -1,6 +1,3 @@
-//Variables
-//var token = "?access_token=40d609a166f2f82e62c7161a1e3b9502e5c11e57"
-
 //Search Variables
 
 var inputEl = document.querySelector('#search')
@@ -14,7 +11,7 @@ var leftCol = document.querySelector("#left")
 
 var profileBaseUrl = "https://api.github.com/users/RedStarThrower"
 
-var profileUrl = profileBaseUrl //+ token
+var profileUrl = profileBaseUrl
 
 // Right Column Variables
 
@@ -22,7 +19,7 @@ var rightCol = document.querySelector("#right")
 
 var reposBaseUrl = "https://api.github.com/users/RedStarThrower/repos"
 
-var reposUrl = reposBaseUrl //+ token
+var reposUrl = reposBaseUrl
 
 //Global Functions
 
@@ -77,10 +74,10 @@ var inputToUrl = function(keyEvent) {
 }
 
 var doSearchRequest = function(userName) {
-    var profileUrl = searchBaseUrl + userName //+ token
+    var profileUrl = searchBaseUrl + userName
     var userNamePromise = $.getJSON(profileUrl)  
     userNamePromise.then(showObj)
-    var reposUrl = searchBaseUrl + userName + "/repos" //+ token
+    var reposUrl = searchBaseUrl + userName + "/repos" 
     var userReposPromise = $.getJSON(reposUrl)  
     userReposPromise.then(showData)
 }
